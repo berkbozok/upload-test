@@ -60,7 +60,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
           <div className="error-message">
             <ErrorIcon />
             <div className="red-ring"></div>
-            {/* <div className="file-name">{uploadingFile.name}</div> */}
+            <div className="file-name">{file.name}</div>
             <div className="text-padding">
               This document could not be uploaded because the file type is
               incorrect.
