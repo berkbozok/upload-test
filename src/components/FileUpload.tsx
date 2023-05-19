@@ -46,7 +46,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
 
     try {
       setLoading(true);
-      // Simulating file upload delay with setTimeout
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const newFileNames = [...fileNames, file.name];
       setFileNames(newFileNames);
