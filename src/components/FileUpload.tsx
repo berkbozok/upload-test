@@ -1,11 +1,13 @@
 import React, { useState, useRef } from "react";
+import XLSXIcon from "../svg/XLSXicon";
+import CSVIcon from "../svg/CSVicon";
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
-  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -37,7 +39,10 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   };
 
   const handleFileUpload = async (file: File) => {
-    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+    const fileExtension = file.name
+      .split(".")
+      .pop()
+      ?.toLowerCase();
 
     if (fileExtension !== "csv" && fileExtension !== "xlsx") {
       setError("Invalid file format. Only .csv and .xlsx files are allowed.");
@@ -47,8 +52,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
     try {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      const newFileNames = [...fileNames, file.name];
-      setFileNames(newFileNames);
+      const newFiles = [...files, file];
+      setFiles(newFiles);
       onFileUpload(file);
       setError(null);
     } catch (error) {
@@ -81,7 +86,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       >
         {loading ? (
           <div className="loading-indicator">
-            <p>Uploading...</p>
+            {files.length > 0 && <p>{files[files.length - 1].name}</p>}
+            <p>uploading...</p>
           </div>
         ) : error ? (
           <p style={{ color: "red" }}>{error}</p>
@@ -100,29 +106,44 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
           style={{ display: "none" }}
           ref={fileInputRef}
         />
-        {/* {fileNames.length > 0 && !loading && !error && (
-          <div className="file-names">
-            {fileNames.map((fileName, index) => (
-              <p key={index}>{fileName}</p>
-            ))}
-          </div>
-        )} */}
       </div>
 
-      <p className="upload-title">Uploaded in the past 3 months</p>
-      <div className="file-box">
-        {fileNames.length > 0 && !error ? (
-          <ul className="file-list">
-            {fileNames.map((fileName, index) => (
-              <li key={index}>{fileName}</li>
-            ))}
-          </ul>
-        ) : (
+      <div className="upload-title">Uploaded in the past 3 months</div>
+
+      {files.length > 0 && !error ? (
+        <ul className="file-list">
+          {files.map((file, index) => (
+            <div key={index} className="uploaded-files">
+              {file.name.endsWith(".xlsx") ? (
+                <div className="file-row">
+                  <XLSXIcon />
+                  <div className="uploaded-file-title">{file.name}</div>
+                  <div className="uploaded-file-size">
+                    {Math.round(file.size / 1024)} KB
+                  </div>
+                </div>
+              ) : file.name.endsWith(".csv") ? (
+                <div className="file-row">
+                  <CSVIcon />
+                  <div className="uploaded-file-title">{file.name}</div>
+
+                  <div className="uploaded-file-size">
+                    {Math.round(file.size / 1024)} KB
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          ))}
+        </ul>
+      ) : (
+        <div className="file-box">
           <div className="empty-files">
             {!loading && !error && "No document for this period"}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
