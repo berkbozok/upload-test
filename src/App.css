@@ -42,6 +42,11 @@
   height: 15vh;
   position: relative;
 }
+.file-name {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-top: 1.25rem;
+}
 
 .upload-title {
   margin-right: auto;

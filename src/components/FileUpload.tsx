@@ -19,6 +19,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   );
   const [error, setError] = useState<JSX.Element | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [uploadingFile, setUploadingFile] = useState<File | null>(null); // Newly added state
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
@@ -59,6 +60,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
           <div className="error-message">
             <ErrorIcon />
             <div className="red-ring"></div>
+            {/* <div className="file-name">{uploadingFile.name}</div> */}
             <div className="text-padding">
               This document could not be uploaded because the file type is
               incorrect.
@@ -75,9 +77,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
 
     try {
       setLoading(true);
+      setUploadingFile(file);
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const newFile = { name: file.name, size: file.size };
       const newFileNames = [...fileNames, newFile];
+      console.log(newFile, "hello");
       setFileNames(newFileNames);
       onFileUpload(file);
       setError(null);
@@ -85,6 +89,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       console.error("Error uploading file:", error);
     } finally {
       setLoading(false);
+      setUploadingFile(null);
     }
   };
 
@@ -114,11 +119,18 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
         }}
       >
         {loading ? (
-          <div className="loading-indicator">
-            <UploadIcon />
-            <Spin indicator={antIcon} />
-            <p>uploading...</p>
-          </div>
+          <>
+            {uploadingFile && (
+              <div>
+                <div className="loading-indicator">
+                  <UploadIcon />
+                  <Spin indicator={antIcon} />
+                  <div className="file-name">{uploadingFile.name}</div>
+                  <p>uploading...</p>
+                </div>
+              </div>
+            )}
+          </>
         ) : error ? (
           <div>{error}</div>
         ) : (
