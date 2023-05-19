@@ -3,8 +3,8 @@ import React from "react";
 const XLSXIcon = () => (
   <div className="icon">
     <svg
-      width="23"
-      height="32"
+      width="22"
+      height="30"
       viewBox="0 0 23 32"
       xmlns="http://www.w3.org/2000/svg"
     >

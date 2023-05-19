@@ -1,14 +1,15 @@
 import React, { useState, useRef } from "react";
 import XLSXIcon from "../svg/XLSXicon";
 import CSVIcon from "../svg/CSVicon";
+import ErrorIcon from "../svg/ErrorIcon";
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
-  const [files, setFiles] = useState<File[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [error, setError] = useState<JSX.Element | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
@@ -45,15 +46,30 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       ?.toLowerCase();
 
     if (fileExtension !== "csv" && fileExtension !== "xlsx") {
-      setError("Invalid file format. Only .csv and .xlsx files are allowed.");
+      setError(
+        <>
+          <div className="error-message">
+            <ErrorIcon />
+            <div className="red-ring"></div>
+            <div className="text-padding">
+              This document could not be uploaded because the file type is
+              incorrect.
+            </div>
+            <div className="text-padding">
+              Only .CSV and .XLSX can be uploaded
+            </div>
+            <div className="click-text">Upload another document</div>
+          </div>
+        </>
+      );
       return;
     }
 
     try {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      const newFiles = [...files, file];
-      setFiles(newFiles);
+      const newFileNames = [...fileNames, file.name];
+      setFileNames(newFileNames);
       onFileUpload(file);
       setError(null);
     } catch (error) {
@@ -86,11 +102,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       >
         {loading ? (
           <div className="loading-indicator">
-            {files.length > 0 && <p>{files[files.length - 1].name}</p>}
+            {fileNames.length > 0 && <p>{fileNames[fileNames.length - 1]}</p>}
             <p>uploading...</p>
           </div>
         ) : error ? (
-          <p style={{ color: "red" }}>{error}</p>
+          <div>{error}</div>
         ) : (
           <div className="drop-area">
             <div className="bold-text">Drag and drop</div>
@@ -108,28 +124,21 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
         />
       </div>
 
-      <div className="upload-title">Uploaded in the past 3 months</div>
+      <p className="upload-title">Uploaded in the past 3 months</p>
 
-      {files.length > 0 && !error ? (
+      {fileNames.length > 0 && !error ? (
         <ul className="file-list">
-          {files.map((file, index) => (
+          {fileNames.map((fileName, index) => (
             <div key={index} className="uploaded-files">
-              {file.name.endsWith(".xlsx") ? (
+              {fileName.endsWith(".xlsx") ? (
                 <div className="file-row">
                   <XLSXIcon />
-                  <div className="uploaded-file-title">{file.name}</div>
-                  <div className="uploaded-file-size">
-                    {Math.round(file.size / 1024)} KB
-                  </div>
+                  <div className="uploaded-file-title">{fileName}</div>
                 </div>
-              ) : file.name.endsWith(".csv") ? (
+              ) : fileName.endsWith(".csv") ? (
                 <div className="file-row">
                   <CSVIcon />
-                  <div className="uploaded-file-title">{file.name}</div>
-
-                  <div className="uploaded-file-size">
-                    {Math.round(file.size / 1024)} KB
-                  </div>
+                  <div className="uploaded-file-title">{fileName}</div>
                 </div>
               ) : (
                 ""
@@ -140,7 +149,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       ) : (
         <div className="file-box">
           <div className="empty-files">
-            {!loading && !error && "No document for this period"}
+            {!loading && "No document for this period"}
           </div>
         </div>
       )}
