@@ -160,3 +160,16 @@
 .text-padding {
   margin-bottom: 5px;
 }
+
+.upload-icon {
+  margin-bottom: -90px;
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: "Texta Alt", sans-serif;
+  text-align: center;
+}

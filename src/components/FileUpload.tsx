@@ -2,13 +2,21 @@ import React, { useState, useRef } from "react";
 import XLSXIcon from "../svg/XLSXicon";
 import CSVIcon from "../svg/CSVicon";
 import ErrorIcon from "../svg/ErrorIcon";
+import CenterSpreadsheetIcon from "../svg/Spreadsheet-Center";
+import RightFolderIcon from "../svg/Folder-Right";
+import LeftFoldertIcon from "../svg/Folder-Left";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
+import UploadIcon from "../svg/UploadIcon";
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
-  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileNames, setFileNames] = useState<{ name: string; size: number }[]>(
+    []
+  );
   const [error, setError] = useState<JSX.Element | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -68,7 +76,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
     try {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      const newFileNames = [...fileNames, file.name];
+      const newFile = { name: file.name, size: file.size };
+      const newFileNames = [...fileNames, newFile];
       setFileNames(newFileNames);
       onFileUpload(file);
       setError(null);
@@ -84,6 +93,10 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       fileInputRef.current.click();
     }
   };
+
+  const antIcon = (
+    <LoadingOutlined style={{ fontSize: 140, color: "#1CC23A" }} spin />
+  );
 
   return (
     <div className="upload-frame">
@@ -102,13 +115,19 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       >
         {loading ? (
           <div className="loading-indicator">
-            {fileNames.length > 0 && <p>{fileNames[fileNames.length - 1]}</p>}
+            <UploadIcon />
+            <Spin indicator={antIcon} />
             <p>uploading...</p>
           </div>
         ) : error ? (
           <div>{error}</div>
         ) : (
           <div className="drop-area">
+            <div>
+              <LeftFoldertIcon />
+              <CenterSpreadsheetIcon />
+              <RightFolderIcon />
+            </div>
             <div className="bold-text">Drag and drop</div>
             <div>your document here or</div>
             <div className="click-text">click to upload</div>
@@ -128,17 +147,27 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
 
       {fileNames.length > 0 && !error ? (
         <ul className="file-list">
-          {fileNames.map((fileName, index) => (
+          {fileNames.map((file, index) => (
             <div key={index} className="uploaded-files">
-              {fileName.endsWith(".xlsx") ? (
+              {file.name.endsWith(".xlsx") ? (
                 <div className="file-row">
                   <XLSXIcon />
-                  <div className="uploaded-file-title">{fileName}</div>
+                  <div className="uploaded-file-title">{file.name}</div>
+                  <div className="uploaded-file-size">{`${(
+                    file.size /
+                    1024 /
+                    1024
+                  ).toFixed(2)} MB`}</div>
                 </div>
-              ) : fileName.endsWith(".csv") ? (
+              ) : file.name.endsWith(".csv") ? (
                 <div className="file-row">
                   <CSVIcon />
-                  <div className="uploaded-file-title">{fileName}</div>
+                  <div className="uploaded-file-title">{file.name}</div>
+                  <div className="uploaded-file-size">{`${(
+                    file.size /
+                    1024 /
+                    1024
+                  ).toFixed(2)} MB`}</div>
                 </div>
               ) : (
                 ""

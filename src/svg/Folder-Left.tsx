@@ -1,6 +1,6 @@
 import React from "react";
 
-function LeftDocumentIcon() {
+function LeftFoldertIcon() {
   return (
     <svg
       width="115px"
@@ -42,4 +42,4 @@ function LeftDocumentIcon() {
   );
 }
 
-export default LeftDocumentIcon;
+export default LeftFoldertIcon;
