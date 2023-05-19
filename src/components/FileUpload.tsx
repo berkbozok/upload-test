@@ -37,11 +37,9 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   };
 
   const handleFileUpload = async (file: File) => {
-    if (
-      file.type !== "application/vnd.ms-excel" &&
-      file.type !==
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    ) {
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+
+    if (fileExtension !== "csv" && fileExtension !== "xlsx") {
       setError("Invalid file format. Only .csv and .xlsx files are allowed.");
       return;
     }
@@ -70,29 +68,32 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   return (
     <div className="upload-frame">
       <div
+        className={`upload-area ${loading ? "uploading" : ""} ${
+          error ? "invalid-format" : ""
+        }`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onClick={handleBrowseClick}
         style={{
-          width: "400px",
-          height: "300px",
-          border: "2px dashed gray",
-          borderRadius: "4px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
           backgroundColor: isDragOver ? "lightgreen" : "transparent",
+          borderStyle: loading || error ? "none" : "dashed",
         }}
       >
         {loading ? (
-          <p>Uploading...</p>
+          <div className="loading-indicator">
+            <p>Uploading...</p>
+          </div>
         ) : error ? (
           <p style={{ color: "red" }}>{error}</p>
         ) : (
-          <p>Drag and drop .csv or .xlsx files here, or click to browse.</p>
+          <div className="drop-area">
+            <div className="bold-text">Drag and drop</div>
+            <div>your document here or</div>
+            <div className="click-text">click to upload</div>
+          </div>
         )}
+
         <input
           type="file"
           accept=".csv,.xlsx"
@@ -100,14 +101,29 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
           style={{ display: "none" }}
           ref={fileInputRef}
         />
+        {/* {fileNames.length > 0 && !loading && !error && (
+          <div className="file-names">
+            {fileNames.map((fileName, index) => (
+              <p key={index}>{fileName}</p>
+            ))}
+          </div>
+        )} */}
       </div>
-      {fileNames.length > 0 && (
-        <ul>
-          {fileNames.map((fileName, index) => (
-            <li key={index}>Uploaded File: {fileName}</li>
-          ))}
-        </ul>
-      )}
+
+      <p className="upload-title">Uploaded in the past 3 months</p>
+      <div className="file-box">
+        {fileNames.length > 0 && !error ? (
+          <ul className="file-list">
+            {fileNames.map((fileName, index) => (
+              <li key={index}>{fileName}</li>
+            ))}
+          </ul>
+        ) : (
+          <div className="empty-files">
+            {!loading && !error && "No document for this period"}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
