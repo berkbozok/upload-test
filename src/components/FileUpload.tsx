@@ -2,9 +2,9 @@ import React, { useState, useRef } from "react";
 import XLSXIcon from "../svg/XLSXicon";
 import CSVIcon from "../svg/CSVicon";
 import ErrorIcon from "../svg/ErrorIcon";
+import LeftFoldertIcon from "../svg/Folder-Left";
 import CenterSpreadsheetIcon from "../svg/Spreadsheet-Center";
 import RightFolderIcon from "../svg/Folder-Right";
-import LeftFoldertIcon from "../svg/Folder-Left";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import UploadIcon from "../svg/UploadIcon";
@@ -137,7 +137,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
           <div>{error}</div>
         ) : (
           <div className="drop-area">
-            <div>
+            <div className="folder-icons">
               <LeftFoldertIcon />
               <CenterSpreadsheetIcon />
               <RightFolderIcon />
