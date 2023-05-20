@@ -114,8 +114,9 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
         onDragLeave={handleDragLeave}
         onClick={handleBrowseClick}
         style={{
-          backgroundColor: isDragOver ? "lightgreen" : "transparent",
+          backgroundColor: isDragOver ? "#F3FCF5" : "transparent",
           borderStyle: loading || error ? "none" : "dashed",
+          borderColor: isDragOver ? "#169A2D" : "#DADEE6",
         }}
       >
         {loading ? (
