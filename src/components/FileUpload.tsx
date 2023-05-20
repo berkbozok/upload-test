@@ -8,6 +8,7 @@ import LeftFoldertIcon from "../svg/Folder-Left";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import UploadIcon from "../svg/UploadIcon";
+import "./FileUpload.css";
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
@@ -108,7 +109,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       <div
         className={`upload-area ${loading ? "uploading" : ""} ${
           error ? "invalid-format" : ""
-        }`}
+        } ${isDragOver ? "drag-over" : ""}`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
