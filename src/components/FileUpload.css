@@ -107,12 +107,12 @@
 }
 
 .uploaded-file-title {
-  margin-top: 0.9375rem;
+  margin-top: 1.125rem;
   font-family: "Texta Alt", sans-serif;
 }
 
 .uploaded-file-size {
-  margin-top: 0.9375rem;
+  margin-top: 1.125rem;
   margin-left: auto;
   padding-right: 0.9375rem;
   font-family: "Texta Alt", sans-serif;
@@ -182,8 +182,15 @@
   margin-left: -90px;
   margin-bottom: -5px;
   transform: rotate(10deg);
+  z-index: 1;
 }
 
 .middle-folder {
   z-index: 2;
+  /* fill: blue;
+  transition: fill 0.3s ease; */
 }
+
+/* .middle-folder :hover {
+  fill: red !important;
+} */
