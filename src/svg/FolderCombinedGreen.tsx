@@ -14,6 +14,7 @@ const FolderCombinedGreen: React.FC<FolderCombinedGreenProps> = ({ style }) => {
       xmlSpace="preserve"
       version="1.1"
       viewBox="0 0 512 346"
+      className="green-folder"
     >
       <image
         width="512"

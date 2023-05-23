@@ -1,5 +1,5 @@
 .upload-frame {
-  padding: 25px;
+  padding: 1.5625rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,7 +74,7 @@
 }
 
 .file-list {
-  padding: 0px;
+  padding: 0rem;
   width: 100%;
   height: 15vh;
   position: relative;
@@ -126,31 +126,31 @@
   flex-direction: column;
   font-family: "Texta Alt", sans-serif;
   text-align: center;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .red-ring {
-  width: 120px;
-  height: 120px;
+  width: 7.5rem;
+  height: 7.5rem;
   border: 4.5px solid red;
   border-radius: 50%;
   box-sizing: border-box;
-  margin-bottom: 20px;
-  margin-top: 50px;
+  margin-bottom: 1.25rem;
+  margin-top: 3.125rem;
 }
 
 .error {
-  margin-bottom: -132px;
-  margin-top: 50px;
+  margin-bottom: -8.25rem;
+  margin-top: 3.125rem;
 }
 
 .text-padding {
-  margin-bottom: 5px;
-  margin-top: 10px;
+  margin-bottom: 0.3125rem;
+  margin-top: 0.625rem;
 }
 
 .upload-icon {
-  margin-bottom: -90px;
+  margin-bottom: -5.625rem;
 }
 
 .loading-indicator {
@@ -168,7 +168,7 @@
   align-items: center;
   flex-direction: row;
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 }
 
 .folder-icons.hidden {
@@ -176,19 +176,24 @@
 }
 
 .left-folder {
-  margin-bottom: -5px;
-  margin-right: -90px;
+  margin-bottom: -0.3125rem;
+  margin-right: -5.625rem;
   transform: rotate(-10deg);
   z-index: 1;
 }
 
 .right-folder {
   margin-left: -90px;
-  margin-bottom: -5px;
+  margin-bottom: -0.3125rem;
   transform: rotate(10deg);
   z-index: 1;
 }
 
 .middle-folder {
   z-index: 2;
+}
+
+.green-folder {
+  margin-left: -0.75rem;
+  margin-bottom: -0.1875rem;
 }
