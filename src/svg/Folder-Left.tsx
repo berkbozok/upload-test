@@ -1,8 +1,12 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 
-function LeftFoldertIcon() {
+interface LeftFoldertIconProps {
+  style?: CSSProperties;
+}
+
+const LeftFoldertIcon: React.FC<LeftFoldertIconProps> = ({ style }) => {
   return (
-    <div className="left-folder">
+    <div className="left-folder" style={style}>
       <svg
         width="125px"
         height="155px"
@@ -42,6 +46,6 @@ function LeftFoldertIcon() {
       </svg>
     </div>
   );
-}
+};
 
 export default LeftFoldertIcon;

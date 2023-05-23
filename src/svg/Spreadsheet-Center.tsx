@@ -1,6 +1,12 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 
-function CenterSpreadsheetIcon() {
+interface CenterSpreadsheetIconProps {
+  style?: CSSProperties;
+}
+
+const CenterSpreadsheetIcon: React.FC<CenterSpreadsheetIconProps> = ({
+  style,
+}) => {
   return (
     <div className="middle-folder">
       <svg
@@ -74,6 +80,6 @@ function CenterSpreadsheetIcon() {
       </svg>
     </div>
   );
-}
+};
 
 export default CenterSpreadsheetIcon;

@@ -1,8 +1,12 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 
-function RightFolderIcon() {
+interface RightFolderIconProps {
+  style?: CSSProperties;
+}
+
+const RightFolderIcon: React.FC<RightFolderIconProps> = ({ style }) => {
   return (
-    <div className="right-folder">
+    <div className="right-folder" style={style}>
       <svg
         width="125px"
         height="155px"
@@ -42,6 +46,6 @@ function RightFolderIcon() {
       </svg>
     </div>
   );
-}
+};
 
 export default RightFolderIcon;

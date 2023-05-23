@@ -9,6 +9,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import UploadIcon from "../svg/UploadIcon";
 import "./FileUpload.css";
+import FolderCombinedGreen from "../svg/FolderCombinedGreen";
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
@@ -20,11 +21,12 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   );
   const [error, setError] = useState<JSX.Element | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [uploadingFile, setUploadingFile] = useState<File | null>(null); // Newly added state
+  const [uploadingFile, setUploadingFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+    event.stopPropagation();
     event.preventDefault();
     const file = event.dataTransfer.files[0];
     setIsDragOver(false);
@@ -32,12 +34,16 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.stopPropagation();
     event.preventDefault();
     setIsDragOver(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragOver(false);
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    const { relatedTarget } = event;
+    if (!event.currentTarget.contains(relatedTarget as Node)) {
+      setIsDragOver(false);
+    }
   };
 
   const handleFileInputChange = async (
@@ -50,10 +56,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   };
 
   const handleFileUpload = async (file: File) => {
-    const fileExtension = file.name
-      .split(".")
-      .pop()
-      ?.toLowerCase();
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
     if (fileExtension !== "csv" && fileExtension !== "xlsx") {
       setError(
@@ -82,7 +85,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const newFile = { name: file.name, size: file.size };
       const newFileNames = [...fileNames, newFile];
-      console.log(newFile, "hello");
       setFileNames(newFileNames);
       onFileUpload(file);
       setError(null);
@@ -111,7 +113,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
           error ? "invalid-format" : ""
         } ${isDragOver ? "drag-over" : ""}`}
         onDrop={handleDrop}
-        onDragOver={handleDragOver}
+        onDragEnter={handleDragOver}
+        onDragOver={(event) => event.preventDefault()}
         onDragLeave={handleDragLeave}
         onClick={handleBrowseClick}
         style={{
@@ -123,28 +126,36 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
         {loading ? (
           <>
             {uploadingFile && (
-              <div>
-                <div className="loading-indicator">
+              <div className="">
+                <div className=" loading-indicator">
                   <UploadIcon />
                   <Spin indicator={antIcon} />
-                  <div className="file-name">{uploadingFile.name}</div>
-                  <p>uploading...</p>
+                  <div className=" file-name">{uploadingFile.name}</div>
+                  <p className="">uploading...</p>
                 </div>
               </div>
             )}
           </>
         ) : error ? (
-          <div>{error}</div>
+          <div className="">{error}</div>
         ) : (
-          <div className="drop-area">
-            <div className="folder-icons">
-              <LeftFoldertIcon />
-              <CenterSpreadsheetIcon />
-              <RightFolderIcon />
+          <div className=" drop-area">
+            <div className=" folder-icons">
+              {!isDragOver ? (
+                <>
+                  <LeftFoldertIcon />
+                  <CenterSpreadsheetIcon />
+                  <RightFolderIcon />
+                </>
+              ) : (
+                <>
+                  <FolderCombinedGreen />
+                </>
+              )}
             </div>
-            <div className="bold-text">Drag and drop</div>
-            <div>your document here or</div>
-            <div className="click-text">click to upload</div>
+            <p className=" bold-text">Drag and drop</p>
+            <p className="childElement">your document here or</p>
+            <p className="childElement click-text">click to upload</p>
           </div>
         )}
 
