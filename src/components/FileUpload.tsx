@@ -202,9 +202,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
         </ul>
       ) : (
         <div className="file-box">
-          <div className="empty-files">
-            {!loading && "No document for this period"}
-          </div>
+          <div className="empty-files">{"No document for this period"}</div>
         </div>
       )}
     </div>
